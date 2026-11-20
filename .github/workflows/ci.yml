@@ -50,7 +50,7 @@ jobs:
         run: npm run build
 
   # Publish the image only after verify passes on a push to main; pull requests and manual runs only verify.
-  # Follows julie-ng/ai-native-sdlc-agent-images (.github/workflows/publish.yml).
+  # Follows flok-ai/agent-images (.github/workflows/publish.yml).
   publish:
     needs: verify
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

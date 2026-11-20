@@ -7,7 +7,7 @@ An [Astro](https://astro.build/) site using the [Starlight](https://starlight.as
 | HTTP API | [`docs/api/artifact.openapi.json`](../docs/api/artifact.openapi.json), generated from Zod by `npm run generate:artifact-openapi` | [starlight-openapi](https://github.com/HiDeoo/starlight-openapi) ([docs](https://starlight-openapi.vercel.app/getting-started/)) | `/http-api/` |
 | Code reference | JSDoc in `server/utils/` and `server/db/` | [starlight-typedoc](https://github.com/HiDeoo/starlight-typedoc) ([docs](https://starlight-typedoc.vercel.app/getting-started/)), which runs [TypeDoc](https://typedoc.org/) with [typedoc-plugin-markdown](https://typedoc-plugin-markdown.org/) | `/code/` |
 
-Both plugins regenerate their pages on every build, so the site always reflects the committed code and contract. Once the Pages workflow is in place (see [Deployment](#deployment)), the site is published at <https://julie-ng.github.io/ai-native-sdlc-platform-services/>.
+Both plugins regenerate their pages on every build, so the site always reflects the committed code and contract. Once the Pages workflow is in place (see [Deployment](#deployment)), the site is published at <https://flok-ai.github.io/platform-services/>.
 
 ## Commands
 
@@ -22,13 +22,13 @@ Run from the repository root:
 
 | Command | Purpose |
 | --- | --- |
-| `npm run docs:dev` | Dev server at <http://localhost:4000/ai-native-sdlc-platform-services/>, reloading on content, style and source changes |
+| `npm run docs:dev` | Dev server at <http://localhost:4000/platform-services/>, reloading on content, style and source changes |
 | `npm run docs:check` | Fail on undocumented exports or broken `{@link}`s in the JSDoc scope |
 | `npm run docs:build` | `docs:check`, then the static site into `docs-site/dist/` |
 | `npm run preview --prefix docs-site` | Serve the built `dist/` locally to check the production output |
 
 > [!NOTE]
-> The site is configured for the GitHub Pages subpath (`base` in `astro.config.mjs`), so locally it lives under `/ai-native-sdlc-platform-services/`, not `/`.
+> The site is configured for the GitHub Pages subpath (`base` in `astro.config.mjs`), so locally it lives under `/platform-services/`, not `/`.
 
 ## How it fits together
 

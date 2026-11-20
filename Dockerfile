@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-# Same pinned Node 24 base as julie-ng/ai-native-sdlc-agent-images.
+# Same pinned Node 24 base as flok-ai/agent-images.
 ARG NODE_IMAGE=node:24.22.1-bookworm-slim@sha256:55fb5f5a527ea2c5c4a95f963e48ef90aa38c7b346054fdc8ee9957a2b55d205
 
 FROM ${NODE_IMAGE} AS build
