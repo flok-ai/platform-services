@@ -21,7 +21,7 @@ The site has its own dependencies. Install the root dependencies first: TypeDoc 
 
 ```bash
 npm ci && npm ci --prefix docs-site
-npm run docs:dev    # Preview at http://localhost:4000/ai-native-sdlc-platform-services/; regenerates on source changes
+npm run docs:dev    # Preview at http://localhost:4000/platform-services/; regenerates on source changes
 npm run docs:check  # Fail on undocumented exports or broken {@link}s in the documented scope
 npm run docs:build  # docs:check, then the static site into docs-site/dist/
 ```

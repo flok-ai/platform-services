@@ -1,16 +1,16 @@
 # Workflow service — implementation plan
 
 > [!IMPORTANT]
-> **Reference plan, not an artifact implementation requirement.** Imported from [the issue-pinned snapshot](https://github.com/julie-ng/ai-native-sdlc-platform-services/blob/67c4f98d81c2a96d4f80c0bc8ecaf25a985ede6e/docs/plans/workflow-service.md). Historical proposals and validation claims are retained as background, not independently verified or adopted here. The architect has replaced attempt-owned/create-only artifacts with [step-owned current artifacts](./artifact-service.md). This POC requires only workflow-owned run/step identities, not attempt tracking or workflow endpoints.
+> **Reference plan, not an artifact implementation requirement.** Imported from [the issue-pinned snapshot](https://github.com/flok-ai/platform-services/blob/67c4f98d81c2a96d4f80c0bc8ecaf25a985ede6e/docs/plans/workflow-service.md). Historical proposals and validation claims are retained as background, not independently verified or adopted here. The architect has replaced attempt-owned/create-only artifacts with [step-owned current artifacts](./artifact-service.md). This POC requires only workflow-owned run/step identities, not attempt tracking or workflow endpoints.
 
 - The [artifact contract](../api/README.md) records current step context, permissions, references and repeat-write behavior.
   - Its [implementation prerequisite](../api/implementation.md#persistence-and-workflow-ownership) replaces the old artifact-to-attempt FK with a proposed step FK. External infrastructure and ADR links below are background, not required inputs or proof of a deployed database.
 
 ## Context
 
-- Database `workflow` on the shared PostgreSQL Flexible Server; Argo has its own database `argo` on the same server ([ADR-005](https://github.com/julie-ng/ai-native-sdlc/blob/main/architecture/decisions/005-state-and-artifacts.md); infrastructure `defaults.auto.tfvars`).
+- Database `workflow` on the shared PostgreSQL Flexible Server; Argo has its own database `argo` on the same server ([ADR-005](https://github.com/flok-ai/flok/blob/main/architecture/decisions/005-state-and-artifacts.md); infrastructure `defaults.auto.tfvars`).
 - Planned artifact-slice target: **PostgreSQL 17**. The pinned plan reported infrastructure version 17 on 2026-10-25; that external configuration has not been independently checked in this PR and no running database is assumed. See [Identifiers](#identifiers).
-- The workflow service is the system of record: runs, retries, start times, per-task cost from goose token usage ([ADR-005](https://github.com/julie-ng/ai-native-sdlc/blob/main/architecture/decisions/005-state-and-artifacts.md)).
+- The workflow service is the system of record: runs, retries, start times, per-task cost from goose token usage ([ADR-005](https://github.com/flok-ai/flok/blob/main/architecture/decisions/005-state-and-artifacts.md)).
 - This repository contains the workflow service and artifact service. The GitHub broker lives in its own repository; its GitHub permission roles do not define workflow step types.
 
 ## Initial release scope
@@ -218,7 +218,7 @@ CREATE UNIQUE INDEX "runs_one_active_per_issue" ON "runs" USING btree ("reposito
 
 ### Steps and attempts
 
-- **Step** = one logical node of the unrolled DAG: plan, implement · 1, review · 1, implement · 2, review · 2, open PR in the [loop diagram](https://github.com/julie-ng/ai-native-sdlc/blob/main/architecture/04-workflow.md). Checks and gates are also steps; one iteration can contain several steps.
+- **Step** = one logical node of the unrolled DAG: plan, implement · 1, review · 1, implement · 2, review · 2, open PR in the [loop diagram](https://github.com/flok-ai/flok/blob/main/architecture/04-workflow.md). Checks and gates are also steps; one iteration can contain several steps.
 - **Step attempt** = one execution of that node. For container steps, each attempt runs in its own pod; Argo's `retryStrategy` re-runs that step in a new pod. A suspend gate does not require an agent pod.
 - **Output attempt** = the existing `step_attempts` row referenced by `steps.outputAttemptId`: the execution that produced the outputs passed downstream. If planner P1 attempt 1 crashes and attempt 2 produces the plan, the pointer identifies P1 attempt 2. It is not another kind of attempt or an approval. A second coding iteration is a new step C2, not another infrastructure attempt of C1.
 - Trusted workflow/platform code establishes the run/step/attempt assignments and binds exact input/output references. Agents report status and usage only for their own assignment; they do not assign themselves another role, select upstream attempts, or change downstream grants.
@@ -491,7 +491,7 @@ What the iteration cap counts — review rounds, or every coder pass including f
 | Reference | FK? | Why |
 |---|---|---|
 | everything inside `workflow` — see `.references()` in [Data model](#data-model--proposal) | yes | same database; `onDelete` per FK is a proposal |
-| run → Argo workflow | no | Argo's own database; archive optional; Argo stays swappable ([ADR-005](https://github.com/julie-ng/ai-native-sdlc/blob/main/architecture/decisions/005-state-and-artifacts.md) trade-off) |
+| run → Argo workflow | no | Argo's own database; archive optional; Argo stays swappable ([ADR-005](https://github.com/flok-ai/flok/blob/main/architecture/decisions/005-state-and-artifacts.md) trade-off) |
 | attempt → Argo node, pod | no | pods are ephemeral |
 | repository, issue, PR, commit → GitHub | no | external |
 
@@ -569,7 +569,7 @@ Design backlog; not every item is a prerequisite for the initial release. Webhoo
 <details>
 <summary>Target design — GitHub webhook ingress and delivery IDs (later)</summary>
 
-Target flow: GitHub webhook → workflow service creates the run → workflow service submits to Argo. This is the accepted direction in [ADR-004](https://github.com/julie-ng/ai-native-sdlc/blob/main/architecture/decisions/004-orchestration-argo-workflows.md); the initial CLI registration step is a temporary workaround.
+Target flow: GitHub webhook → workflow service creates the run → workflow service submits to Argo. This is the accepted direction in [ADR-004](https://github.com/flok-ai/flok/blob/main/architecture/decisions/004-orchestration-argo-workflows.md); the initial CLI registration step is a temporary workaround.
 
 - **`X-GitHub-Delivery`** is an HTTP header supplied by GitHub when it sends a webhook notification. GitHub calls sending that notification a "delivery"; the header contains a GUID identifying the event. The proposed `triggers.githubDeliveryId` column stores that value. [GitHub: delivery headers](https://docs.github.com/en/webhooks/webhook-events-and-payloads#delivery-headers).
 - A requested redelivery carries the same header value as the original delivery. The proposed unique constraint helps recognize an already-recorded notification so the service can avoid starting another run for it. [GitHub: use the delivery header](https://docs.github.com/en/webhooks/using-webhooks/best-practices-for-using-webhooks#use-the-x-github-delivery-header).

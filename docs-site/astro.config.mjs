@@ -1,5 +1,5 @@
 // Documentation site for Platform Services, published to GitHub Pages.
-// `site` and `base` match the project Pages URL: https://julie-ng.github.io/ai-native-sdlc-platform-services/
+// `site` and `base` match the project Pages URL: https://flok-ai.github.io/platform-services/
 import starlight from '@astrojs/starlight'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
@@ -8,8 +8,8 @@ import starlightTypeDoc from 'starlight-typedoc'
 import { openAPIComponentOverrides } from './src/openapi-overrides.mjs'
 
 export default defineConfig({
-  site: 'https://julie-ng.github.io',
-  base: '/ai-native-sdlc-platform-services',
+  site: 'https://flok-ai.github.io',
+  base: '/platform-services',
   // Port 3000 is the Nuxt app; the docs preview runs alongside it.
   server: { port: 4000 },
   integrations: [
@@ -24,7 +24,7 @@ export default defineConfig({
         {
           icon: 'github',
           label: 'GitHub',
-          href: 'https://github.com/julie-ng/ai-native-sdlc-platform-services',
+          href: 'https://github.com/flok-ai/platform-services',
         },
       ],
       plugins: [
