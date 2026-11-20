@@ -257,3 +257,9 @@ Plain `make` only lists the targets. On startup, the pod migrates the database a
 3. In that shell, set `BASE=http://platform-services.platform.svc.cluster.local` and the admin token from Key Vault (`platform-services-admin-token`). Repeat the [local walkthrough](#trying-the-artifact-routes-locally) with `$BASE` in place of `localhost:3000`: `POST /api/runs` returns 201, the planner uploads a plan and the coder downloads it.
 
 Cluster execution has not been verified yet.
+
+## License
+
+[flok](https://github.com/flok-ai) platform services is licensed under the [GNU Affero General Public License v3.0 only](./LICENSE) (AGPL-3.0-only). Copies, modified versions and network deployments must keep the attribution described in [NOTICE](./NOTICE).
+
+Versions up to and including v0.1.0 were released under the MIT License.

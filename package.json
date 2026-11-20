@@ -2,6 +2,7 @@
   "name": "platform-services",
   "type": "module",
   "private": true,
+  "license": "AGPL-3.0-only",
   "scripts": {
     "build": "nuxt build",
     "check:guidance": "node scripts/check-guidance.ts",
