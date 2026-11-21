@@ -6,6 +6,11 @@ import { createError } from 'h3'
 import type { H3Event } from 'h3'
 import { useRuntimeConfig } from 'nitropack/runtime'
 
+function isValidExpiryWindow(expiryMinutes: number) {
+  return Number.isFinite(expiryMinutes) && expiryMinutes > 0
+    && Number.isFinite(new Date(Date.now() + expiryMinutes * 60_000).getTime())
+}
+
 /**
  * Require a signing key, database URL and a finite positive expiry window.
  * @param event - Request whose private runtime settings supply signing and expiry configuration.
@@ -17,8 +22,7 @@ export function requireStepTokenConfiguration(event: H3Event) {
     hmacKey, hmacTokenExpiryMinutes, databaseUrl,
   } = useRuntimeConfig(event)
   const expiryMinutes = Number(hmacTokenExpiryMinutes)
-  if (!hmacKey || !databaseUrl || !Number.isFinite(expiryMinutes) || expiryMinutes <= 0
-    || !Number.isFinite(new Date(Date.now() + expiryMinutes * 60_000).getTime())) {
+  if (!hmacKey || !databaseUrl || !isValidExpiryWindow(expiryMinutes)) {
     throw createError({
       statusCode: 503,
       message: 'Authentication is not configured',
