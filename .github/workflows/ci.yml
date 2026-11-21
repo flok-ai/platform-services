@@ -22,6 +22,18 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -h 127.0.0.1 -U postgres"
+          --health-interval 1s
+          --health-timeout 5s
+          --health-retries 30
     steps:
       - uses: actions/checkout@v7
         with:
@@ -44,8 +56,8 @@ jobs:
         run: npm run check:guidance
       - name: Contract tests
         run: npm run test:contract
-      - name: Unit tests
-        run: npm run test:unit -- --coverage
+      - name: Unit and PostgreSQL integration tests
+        run: npx vitest run shared server tests/integration --coverage
       - name: Save coverage report
         uses: actions/upload-artifact@v7
         with:
@@ -58,7 +70,6 @@ jobs:
         run: npm run build
 
   # Upload in a separate job so code installed and run by verify never gets an OIDC token.
-  # PostgreSQL integration tests don't run in CI, so repository code reports lower coverage than it has.
   coverage:
     needs: verify
     runs-on: ubuntu-latest

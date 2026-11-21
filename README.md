@@ -86,7 +86,7 @@ npm run db:migrate   # Apply migrations to NUXT_DATABASE_URL
 npm run db:down      # Stop and discard the database
 ```
 
-`test:db` connects to `TEST_DATABASE_URL` (default `postgres://postgres:postgres@localhost:5432/postgres`, matching `compose.yaml`). It is not part of `verify` or CI because it needs Docker.
+`test:db` connects to `TEST_DATABASE_URL` (default `postgres://postgres:postgres@localhost:5432/postgres`, matching `compose.yaml`). Run the integration suite separately from local `verify`. GitHub Actions supplies a disposable PostgreSQL 17 service and reports combined unit and integration coverage to Qlty.
 
 A production build (`npm run preview`, the container image) applies pending migrations to its `NUXT_DATABASE_URL` at startup, as the configured database user, so in the cluster `platform-services-mi` owns the tables. `/readyz` fails until migrations complete, and a failed migration exits the process. Migrations run from `server/db/migrations` relative to the working directory. `npm run dev` never migrates, so pointing it at a shared database with a personal role cannot take ownership of the tables; use `npm run db:migrate` locally.
 
