@@ -3,11 +3,11 @@ import { Socket } from 'node:net'
 import { createError, createEvent } from 'h3'
 import type { H3Event } from 'h3'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { contexts, planP1, planP2, uploadedRecord } from '../../../tests/support/artifact-fixtures.ts'
-import type { StepContext } from '../../../shared/types/artifact.ts'
-import registerArtifact from '../../api/artifacts/index.post.ts'
-import reportUpload from '../../api/artifacts/[id].put.ts'
-import getDownloadSas from '../../api/artifacts/[id]/sas.get.ts'
+import { contexts, planP1, planP2, uploadedRecord } from '#test-support/artifact-fixtures.ts'
+import type { StepContext } from '#shared/types/artifact.ts'
+import registerArtifact from '#server/api/artifacts/index.post.ts'
+import reportUpload from '#server/api/artifacts/[id].put.ts'
+import getDownloadSas from '#server/api/artifacts/[id]/sas.get.ts'
 import { signDownload, signUpload } from './azure-sas.utils.ts'
 import { findArtifactById, recordUploadReport, upsertArtifact } from './repository.utils.ts'
 import type { ArtifactRecord } from './repository.utils.ts'
@@ -26,7 +26,7 @@ vi.mock('nitropack/runtime', () => ({
     artifactStorageContainer: 'artifacts',
   }),
 }))
-vi.mock('../../db/use-db.ts', () => ({ useDB: () => db }))
+vi.mock('#server/db/use-db.ts', () => ({ useDB: () => db }))
 vi.mock('../guards/require-step-context.ts', () => ({ requireStepContext: vi.fn() }))
 vi.mock('../log-security-event.utils.ts', () => ({ logSecurityEvent: vi.fn() }))
 vi.mock('./repository.utils.ts', () => ({

@@ -1,11 +1,11 @@
 import { defineEventHandler } from 'h3'
-import { completeArtifactRequestSchema } from '../../../shared/utils/zod-schemas/artifact.schema.ts'
-import { useDB } from '../../db/use-db.ts'
-import { requireArtifactAccess } from '../../utils/guards/require-artifact-access.ts'
-import { requireArtifactConfiguration } from '../../utils/guards/require-artifact-configuration.ts'
-import { requireStepContext } from '../../utils/guards/require-step-context.ts'
-import { readArtifactBody, readArtifactId } from '../../utils/artifact/http.utils.ts'
-import { recordUploadReport } from '../../utils/artifact/repository.utils.ts'
+import { completeArtifactRequestSchema } from '#shared/utils/zod-schemas/artifact.schema.ts'
+import { useDB } from '#server/db/use-db.ts'
+import { requireArtifactAccess } from '#server/utils/guards/require-artifact-access.ts'
+import { requireArtifactConfiguration } from '#server/utils/guards/require-artifact-configuration.ts'
+import { requireStepContext } from '#server/utils/guards/require-step-context.ts'
+import { readArtifactBody, readArtifactId } from '#server/utils/artifact/http.utils.ts'
+import { recordUploadReport } from '#server/utils/artifact/repository.utils.ts'
 
 // Report the outcome of a direct upload to Azure: uploaded (reported, not verified,
 // size/hash) or failed, with optional details. Each report replaces the previous one.
