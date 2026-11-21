@@ -1,0 +1,8 @@
+# zizmor configuration: https://docs.zizmor.sh/configuration/
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        # Allow version tags (e.g. actions/checkout@v7) instead of requiring
+        # commit SHAs. Unversioned refs are still flagged.
+        "*": ref-pin
