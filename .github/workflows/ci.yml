@@ -22,6 +22,10 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+      # Lets the qlty action authenticate the coverage upload without a stored token.
+      id-token: write
     steps:
       - uses: actions/checkout@v7
         with:
@@ -45,7 +49,13 @@ jobs:
       - name: Contract tests
         run: npm run test:contract
       - name: Unit tests
-        run: npm run test:unit
+        run: npm run test:unit -- --coverage
+      # PostgreSQL integration tests don't run in CI, so repository code reports lower coverage than it has.
+      - name: Upload coverage to qlty
+        uses: qltysh/qlty-action/coverage@v2
+        with:
+          oidc: true
+          files: coverage/lcov.info
       - name: Typecheck
         run: npm run typecheck
       - name: Build
