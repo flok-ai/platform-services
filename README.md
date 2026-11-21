@@ -1,5 +1,8 @@
 # Platform Services
 
+[![Maintainability](https://qlty.sh/gh/flok-ai/projects/platform-services/maintainability.svg)](https://qlty.sh/gh/flok-ai/projects/platform-services)
+[![Code Coverage](https://qlty.sh/gh/flok-ai/projects/platform-services/coverage.svg)](https://qlty.sh/gh/flok-ai/projects/platform-services)
+
 Nuxt 4 application for RESTful platform APIs. The initial release focuses on APIs; product UI follows later. See [architecture and decisions](./docs/architecture.md) for implemented capabilities, agreed stack choices, and open decisions.
 
 ## Development
