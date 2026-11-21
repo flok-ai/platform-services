@@ -1,9 +1,11 @@
+import { defineEventHandler, setResponseHeader, setResponseStatus } from 'h3'
+import { useRuntimeConfig } from 'nitropack/runtime'
 import { sql } from 'drizzle-orm'
-import { requireMigrations } from '#server/db/migrate'
-import { useDB } from '#server/db/use-db'
-import { checkReadiness, requireStorageConfiguration } from '#server/utils/readiness.utils'
-import type { ReadinessProbe } from '#server/utils/readiness.utils'
-import { useLogger } from '#server/utils/use-logger'
+import { requireMigrations } from '../db/migrate.ts'
+import { useDB } from '../db/use-db.ts'
+import { checkReadiness, requireStorageConfiguration } from '../utils/readiness.utils.ts'
+import type { ReadinessProbe } from '../utils/readiness.utils.ts'
+import { useLogger } from '../utils/use-logger.ts'
 
 // Kubernetes readiness probe: public, outside /api, no step context guard, excluded from the access log.
 // 200 when PostgreSQL answers, startup migrations have completed (production builds only; see
