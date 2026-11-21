@@ -26,7 +26,7 @@ export async function requireStepContext(event: H3Event) {
   const token = /^Bearer ([0-9a-f]{64})$/i.exec(getHeader(event, 'authorization') ?? '')?.[1]
   const runId = uuidSchema.safeParse(getHeader(event, 'x-run-id'))
   const stepId = uuidSchema.safeParse(getHeader(event, 'x-step-id'))
-  const reject = (reason: string): never => {
+  function reject(reason: string): never {
     logSecurityEvent(event, reason, {
       runId: runId.success ? runId.data : undefined,
       stepId: stepId.success ? stepId.data : undefined,
@@ -37,16 +37,16 @@ export async function requireStepContext(event: H3Event) {
     })
   }
   if (!token || !runId.success || !stepId.success) {
-    return reject('missing_or_malformed_credentials')
+    reject('missing_or_malformed_credentials')
   }
   const records = await findRunSteps(useDB(), runId.data)
   const caller = records.find(record => record.step.id === stepId.data)
   if (!caller) {
-    return reject('run_or_step_not_found')
+    reject('run_or_step_not_found')
   }
   const { run, step } = caller
   if (isStepTokenExpired(run.createdAt, expiryMinutes)) {
-    return reject('token_expired')
+    reject('token_expired')
   }
   if (!verifyStepToken(token, key, {
     runId: run.id,
@@ -54,12 +54,12 @@ export async function requireStepContext(event: H3Event) {
     stepId: step.id,
     role: step.role,
   })) {
-    return reject('invalid_hmac')
+    reject('invalid_hmac')
   }
   const planners = records.filter(record => record.step.role === 'planner')
   const coders = records.filter(record => record.step.role === 'coder')
   if (records.length !== 2 || planners.length !== 1 || coders.length !== 1) {
-    return reject('invalid_workflow')
+    reject('invalid_workflow')
   }
   const plan = {
     runId: run.id,
@@ -76,7 +76,7 @@ export async function requireStepContext(event: H3Event) {
     },
   })
   if (!context.ok) {
-    return reject('invalid_step_context')
+    reject('invalid_step_context')
   }
   event.context.step = context.value
 }

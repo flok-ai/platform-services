@@ -156,6 +156,7 @@ test('missing signing/database settings or invalid expiry is 503 without a looku
     { hmacTokenExpiryMinutes: -1 },
     { hmacTokenExpiryMinutes: 'bad' },
     { hmacTokenExpiryMinutes: Infinity },
+    { hmacTokenExpiryMinutes: Number.MAX_SAFE_INTEGER },
   ]) {
     Object.assign(config, {
       hmacKey: 'test-hmac-key',
