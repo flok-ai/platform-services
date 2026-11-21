@@ -19,6 +19,7 @@ logs
 .idea
 .devcontainer/devcontainer.json
 tmp/
+coverage/
 
 # Local env files
 .env

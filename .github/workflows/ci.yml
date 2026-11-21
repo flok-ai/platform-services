@@ -45,11 +45,42 @@ jobs:
       - name: Contract tests
         run: npm run test:contract
       - name: Unit tests
-        run: npm run test:unit
+        run: npm run test:unit -- --coverage
+      - name: Save coverage report
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage
+          path: coverage/lcov.info
+          retention-days: 1
       - name: Typecheck
         run: npm run typecheck
       - name: Build
         run: npm run build
+
+  # Upload in a separate job so code installed and run by verify never gets an OIDC token.
+  # PostgreSQL integration tests don't run in CI, so repository code reports lower coverage than it has.
+  coverage:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      # Lets the qlty action authenticate the upload without a stored token.
+      id-token: write
+    steps:
+      # qlty checks the report's file paths and commit details against the checkout.
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          name: coverage
+          path: coverage
+      - name: Upload coverage to qlty
+        uses: qltysh/qlty-action/coverage@v2
+        with:
+          oidc: true
+          files: coverage/lcov.info
 
   # Publish the image only after verify passes on a push to main; pull requests and manual runs only verify.
   # Follows flok-ai/agent-images (.github/workflows/publish.yml).

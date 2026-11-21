@@ -37,6 +37,7 @@ Database authentication: opt-in `NUXT_DATABASE_ENTRA_AUTH=true` uses Azure Ident
 
 | Date / context | Decision and reason |
 | --- | --- |
+| 2026-11-21 / test coverage | CI uploads V8 line coverage from unit tests to qlty via OIDC in a separate job that runs no project code (Julie); PostgreSQL integration tests stay out of CI, so repository code is under-reported. |
 | 2026-11-11 / ESLint and CI visibility | Adopt the workflows repository’s object/array layout rules through existing Nuxt ESLint, retaining no semicolons and JSDoc checks; split CI verification into named steps so failures identify the check, while keeping local `verify`. |
 | 2026-11-10 / cluster deployment (#45) | Deploy as one replica in `platform` from plain manifests in `manifests/` with `envsubst` placeholders (public repository), pulling `latest` with `imagePullPolicy: Always`; Terraform keeps the ServiceAccount and identities, and the infrastructure repository owns the SecretProviderClass. |
 | 2026-11-10 / deployment secrets (#45) | The admin token and HMAC key arrive as CSI-mounted Key Vault files that a separate entrypoint script exports before starting Node, matching the agent pods; the token expiry stays at 15 minutes as a deliberate cost cap. |
