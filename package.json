@@ -29,10 +29,10 @@
     "test:db": "vitest run tests/integration"
   },
   "dependencies": {
-    "@azure/identity": "4.14.0",
+    "@azure/identity": "4.14.1",
     "@azure/storage-blob": "12.34.0",
     "drizzle-orm": "0.45.4",
-    "nuxt": "^4.6.2",
+    "nuxt": "^4.6.4",
     "pg": "8.23.1",
     "pino": "10.4.0",
     "vue": "^3.5.44",
@@ -51,5 +51,11 @@
     "typescript": "^6.0.3",
     "vitest": "5.0.5",
     "vue-tsc": "3.3.13"
+  },
+  "overrides": {
+    "@esbuild-kit/core-utils": {
+      "esbuild": "0.28.2"
+    },
+    "minimatch@9 - 10": "11.0.9"
   }
 }
