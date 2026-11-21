@@ -3,6 +3,11 @@
   "type": "module",
   "private": true,
   "license": "AGPL-3.0-only",
+  "imports": {
+    "#server/*": "./server/*",
+    "#shared/*": "./shared/*",
+    "#test-support/*": "./tests/support/*"
+  },
   "scripts": {
     "build": "nuxt build",
     "check:guidance": "node scripts/check-guidance.ts",

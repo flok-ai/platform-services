@@ -18,6 +18,7 @@ Platform Services is a Nuxt 4 application being developed to expose RESTful APIs
 
 | Area | Decision | Implementation status |
 | --- | --- | --- |
+| 2026-11-21 / package subpath imports | Define Node package imports for `#server`, `#shared` and `#test-support` so direct artifact handler tests can use short paths with explicit file extensions in both Nuxt and standalone Vitest. |
 | First release | RESTful APIs, with UI deferred | [Artifact API](./api/README.md) implemented; HMAC authentication and admin run creation implemented; live verification status is recorded in the README |
 | Language | TypeScript by default, including Vue script logic | Applies to all server code and tests |
 | Persistence | Drizzle is the ORM | PostgreSQL 17 schema, migrations and artifact repository implemented; tested against disposable Docker PostgreSQL; Azure database provisioned per #44; production builds migrate at startup as the app identity (#45); cluster connectivity unverified |
