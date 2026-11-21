@@ -12,5 +12,11 @@ export default defineConfig({
       'tests/contract/**/*.test.ts',
       'tests/integration/**/*.test.ts',
     ],
+    // Off by default; enable with `--coverage`. app/ is left out until it has tests.
+    coverage: {
+      provider: 'v8',
+      include: ['{server,shared}/**/*.ts'],
+      reporter: ['text', 'lcov'],
+    },
   },
 })
